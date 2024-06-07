@@ -1,0 +1,216 @@
+The explanation of the AI FINAL PROJECT CODE 
+
+FOR THE CODE BELOW : import pandas as pd
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+data = pd.read_csv("accelerometer_gyro_mobile_phone_dataset.csv")
+
+# Drop the timestamp column as it's not needed for modeling
+data = data.drop(columns=['timestamp'])
+
+# Split the data into features and target
+X = data.drop(columns=['Activity'])
+X.info()
+X.head()
+X.describe()
+print("")
+print("")
+y = data['Activity']
+y.info()
+y.head()
+y.describe()
+print("")
+print("")
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Scale the features for KNN
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Initialize the models
+knn = KNeighborsClassifier()
+decision_tree = DecisionTreeClassifier(random_state=42)
+naive_bayes = GaussianNB()
+
+# Train and evaluate KNN
+knn.fit(X_train_scaled, y_train)
+knn_predictions = knn.predict(X_test_scaled)
+knn_accuracy = accuracy_score(y_test, knn_predictions)
+
+# Train and evaluate Decision Tree
+decision_tree.fit(X_train, y_train)
+decision_tree_predictions = decision_tree.predict(X_test)
+decision_tree_accuracy = accuracy_score(y_test, decision_tree_predictions)
+
+# Train and evaluate Naive Bayes
+naive_bayes.fit(X_train, y_train)
+naive_bayes_predictions = naive_bayes.predict(X_test)
+naive_bayes_accuracy = accuracy_score(y_test, naive_bayes_predictions)
+
+knn_accuracy, decision_tree_accuracy, naive_bayes_accuracy
+
+THE EXPLANATION : 
+
+Importing Libraries: The code imports necessary libraries for data manipulation (pandas), machine learning algorithms (scikit-learn), data preprocessing, model selection, and evaluation.
+
+Loading Data: Your dataset, which contains accelerometer and gyroscope data collected from mobile phones for human activity recognition, is loaded into a pandas Data Frame named data.
+
+Data Preprocessing:
+
+The 'timestamp' column is dropped as it's not relevant for the classification task.
+Features (accelerometer and gyroscope readings) are separated from the target variable (activity: standing or walking).
+Information about the features and target variable, such as data types, head (top rows), and summary statistics, is printed to understand the structure and distribution of the data.
+Train-Test Split: The data is split into training and testing sets with a 70-30 ratio. This allows for training the models on one subset and evaluating their performance on another independent subset.
+
+Feature Scaling: Since K-Nearest Neighbors (KNN) relies on distance metrics, the features are scaled using StandardScaler to ensure they have the same scale. This step is important for achieving optimal performance from the KNN algorithm.
+
+Model Initialization:
+
+Three classifiers are initialized: K-Nearest Neighbors (KNN), Decision Tree, and Naive Bayes. These classifiers will be trained and evaluated using the data.
+Model Training and Evaluation:
+
+KNN: The KNN classifier is trained on the scaled training data and evaluated on the scaled testing data. Its accuracy score indicates how well it predicts the activity classes (standing or walking) based on accelerometer and gyroscope readings.
+Decision Tree: The Decision Tree classifier is trained on the original training data (without scaling) and evaluated on the original testing data. Its accuracy score reflects its performance in predicting activity classes.
+Naive Bayes: The Naive Bayes classifier is trained on the original training data and evaluated on the original testing data. Its accuracy score indicates how well it predicts activity classes based on the provided data.
+Model Accuracy: The accuracy scores of all three models (KNN, Decision Tree, Naive Bayes) are printed. These scores provide insights into how well each model performs in classifying activities (standing or walking) based on accelerometer and gyroscope data from mobile phones.
+
+In summary, this code performs machine learning classification tasks on your dataset to predict human activities (standing or walking) using accelerometer and gyroscope data collected from mobile phones. It trains and evaluates three different classifiers and provides accuracy scores to assess their performance.
+
+
+FOR THE CODE OF THE MULTIVARIATE DATA ANALYSIS
+
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import pandas as pd
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+%matplotlib inline
+
+
+# Summary statistics
+data = pd.read_csv('data/accelerometer_gyro_mobile_phone_dataset.csv')
+print(data.describe())
+
+# SELECT ONLY NUMERIC COLUMNS
+data_numeric = data.select_dtypes(include=[np.number])
+
+# COMPUTE THE CORRELATION MATRIX
+corr = data_numeric.corr()
+
+# PLOT THE CORRELATION MATRIX
+sns.heatmap(corr, annot=True, cmap='coolwarm')
+
+# PAIRPLOT
+sns.pairplot(data)
+
+# SCATTER MATRIX
+pd.plotting.scatter_matrix(data, figsize=(10, 10))
+
+#DISPLAY THE CORRELATION MATRIX
+print(corr)
+
+
+
+
+THE EXPLANATION : 
+
+Importing Libraries: Necessary libraries are imported, including pandas for data manipulation, scikit-learn for machine learning, seaborn and matplotlib for visualization, and numpy for numerical computations.
+
+Loading Data: Your dataset is loaded into a pandas DataFrame named data.
+
+Summary Statistics:
+
+data.describe(): This method computes summary statistics of the numerical columns in your dataset, such as count, mean, standard deviation, minimum, and maximum values. It gives you an overview of the distribution of your data.
+Selecting Numeric Columns:
+
+data.select_dtypes(include=[np.number]): This selects only the numeric columns from your dataset. This step is crucial for computing correlations and visualizing relationships between variables.
+Computing the Correlation Matrix:
+
+The correlation matrix (corr) is computed using the .corr() method on the numeric data. This matrix shows the pairwise correlations between all pairs of numeric variables in your dataset.
+Plotting the Correlation Matrix:
+
+sns.heatmap(corr, annot=True, cmap='coolwarm'): This plots a heatmap of the correlation matrix, where each cell's color represents the correlation coefficient between two variables. The annot=True parameter displays the correlation values in each cell.
+Pairplot:
+
+sns.pairplot(data): This creates a grid of scatterplots showing the pairwise relationships between variables. Each scatterplot represents the relationship between two variables, and the diagonal shows the distribution of each variable.
+Scatter Matrix:
+
+pd.plotting.scatter_matrix(data, figsize=(10, 10)): This plots a matrix of scatterplots, where each scatterplot represents the relationship between two variables. It's similar to the pairplot but allows for more customization of the plot layout.
+Displaying the Correlation Matrix:
+
+print(corr): This simply displays the correlation matrix in tabular format, showing the numeric values of the correlations between variables.
+Explanation:
+
+These multivariate data analysis steps provide insights into the relationships between variables in your dataset. The summary statistics give an overview of the distribution of each variable, while the correlation matrix, heatmap, pairplot, and scatter matrix help visualize the relationships and dependencies between variables.
+
+By examining these visualizations and numerical summaries, you can gain a deeper understanding of how the accelerometer and gyroscope readings relate to each other and how they might influence the prediction of human activities (standing or walking) using machine learning models.
+
+
+
+
+
+
+
+THE FINAL OBSERVATIONS RESULTS BASED ON THE CORRELATIONS RESULTS OF 3 ALGORYTHMS  :
+
+KNN Accuracy:
+
+The accuracy of the KNN algorithm is represented by the variable knn_accuracy.
+Correlation with itself (KNN accuracy) is always 1, as it's comparing the algorithm's accuracy with itself.
+The correlation coefficient between KNN accuracy and Decision Tree accuracy is approximately 0.982, indicating a very high positive correlation.
+The correlation coefficient between KNN accuracy and Naive Bayes accuracy is approximately 0.982, also indicating a very high positive correlation.
+These high positive correlation coefficients suggest that the accuracy scores of KNN are highly similar to those of Decision Tree and Naive Bayes. In other words, when KNN performs well (or poorly), Decision Tree and Naive Bayes tend to perform similarly.
+Decision Tree Accuracy:
+
+The accuracy of the Decision Tree algorithm is represented by the variable decision_tree_accuracy.
+Correlation with itself (Decision Tree accuracy) is always 1.
+The correlation coefficient between Decision Tree accuracy and KNN accuracy is approximately 0.982, indicating a very high positive correlation.
+The correlation coefficient between Decision Tree accuracy and Naive Bayes accuracy is approximately 0.974, also indicating a very high positive correlation.
+Similar to KNN, Decision Tree's accuracy scores are highly similar to those of KNN and Naive Bayes.
+Naive Bayes Accuracy:
+
+The accuracy of the Naive Bayes algorithm is represented by the variable naive_bayes_accuracy.
+Correlation with itself (Naive Bayes accuracy) is always 1.
+The correlation coefficient between Naive Bayes accuracy and KNN accuracy is approximately 0.982, indicating a very high positive correlation.
+The correlation coefficient between Naive Bayes accuracy and Decision Tree accuracy is approximately 0.974, also indicating a very high positive correlation.
+Similar to KNN and Decision Tree, Naive Bayes' accuracy scores are highly similar to those of KNN and Decision Tree.
+In summary, all three algorithms (KNN, Decision Tree, and Naive Bayes) have very high positive correlations in their accuracy scores. This suggests that they tend to perform similarly in terms of classification accuracy on the given dataset. When one algorithm performs well (or poorly), the others tend to do the same, indicating a consistent pattern in their predictions.
+
+
+
+
+THE RESULTS ANALYSIS
+
+
+
+The code you've shared trains a Gaussian Naive Bayes model on your training data and then evaluates its performance on both the training and testing data.
+
+The score method returns the mean accuracy of the model on the given data. The training score (train_score) is the accuracy of the model on the same data it was trained on. The test score (test_score) is the accuracy of the model on new, unseen data.
+
+If the training accuracy is significantly higher than the testing accuracy, it could indicate overfitting. Overfitting is a modeling error that occurs when a function is too closely fit to a limited set of data points. The model learns the training data too well, capturing the noise along with the underlying pattern. It performs well on the training data but poorly on new, unseen data.
+
+
+
+THE TARGET AND THE FEATURES 
+
+
+Target Variable: This is what you want to predict or classify. In your case, 'Activity' is the target variable. It's an integer, indicating it's a classification problem.
+
+Features: These are the inputs to your model that it uses to make predictions. In your case, the features are 'accX', 'accY', 'accZ', 'gyroX', 'gyroY', 'gyroZ', and 'timestamp'. These could be measurements from a sensor, for example, where 'accX', 'accY', and 'accZ' are accelerometer readings and 'gyroX', 'gyroY', and 'gyroZ' are gyroscope readings. 'timestamp' could be the time at which these readings were taken.
