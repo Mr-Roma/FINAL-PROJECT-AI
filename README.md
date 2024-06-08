@@ -35,7 +35,7 @@ And the target data is the activity data, that we can divide into 2 class such a
 ## Setup
 Make sure all requirements are installed in your local machine beforehand. Then, clone this repository.
 ```bash
-git clone https://github.com/Mr-Roma/Final-Project-Strategy-Algorythm.git
+git clone https://github.com/Mr-Roma/FINAL-PROJECT-AI.git
 ```
 
 ## Program Structure
