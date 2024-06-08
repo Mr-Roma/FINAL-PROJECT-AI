@@ -40,6 +40,7 @@ git clone https://github.com/Mr-Roma/FINAL-PROJECT-AI.git
 
 ## Program Structure
 
+```
 │ README.md
 │ .gitignore
 │
@@ -59,3 +60,4 @@ git clone https://github.com/Mr-Roma/FINAL-PROJECT-AI.git
 └─── Assesment CLO-GROUP7-ENG.ipynb
 └─── testing_assesment_CLO3.ipynb
 └─── GROUP7_FINAL_PROJECT_AI.pdf
+```
